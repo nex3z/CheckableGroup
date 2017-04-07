@@ -10,22 +10,27 @@
     <com.nex3z.checkablegroup.CheckableGroup
         android:id="@+id/cg_button_group"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:cgCheckedButton="@+id/tb_b">
 
         <ToggleButton
             android:id="@+id/tb_a"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
         <ToggleButton
             android:id="@+id/tb_b"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
         <ToggleButton
             android:id="@+id/tb_c"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
 
     </com.nex3z.checkablegroup.CheckableGroup>
 

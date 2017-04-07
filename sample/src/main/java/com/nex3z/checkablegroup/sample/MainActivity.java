@@ -3,6 +3,8 @@ package com.nex3z.checkablegroup.sample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 import com.nex3z.checkablegroup.CheckableGroup;
@@ -27,9 +29,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ToggleButton tb = new ToggleButton(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+        tb.setLayoutParams(params);
+        tb.setChecked(true);
         group.addView(tb);
-
-        ToggleButton btnA = (ToggleButton) findViewById(R.id.tb_a);
-        group.check(btnA.getId());
     }
 }
