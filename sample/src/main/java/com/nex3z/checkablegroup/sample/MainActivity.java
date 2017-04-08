@@ -7,7 +7,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
-import com.nex3z.checkablegroup.CheckableGroup;
+import com.nex3z.checkablegroup.MultiCheckableGroup;
+import com.nex3z.checkablegroup.SingleCheckableGroup;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -20,10 +21,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initCheckableButtonGroup() {
-        CheckableGroup group = (CheckableGroup) findViewById(R.id.cg_button_group);
-        group.setOnCheckedChangeListener(new CheckableGroup.OnCheckedChangeListener() {
+        SingleCheckableGroup single = (SingleCheckableGroup) findViewById(R.id.single_select_group);
+        single.setOnCheckedChangeListener(new SingleCheckableGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CheckableGroup group, int checkedId) {
+            public void onCheckedChanged(SingleCheckableGroup group, int checkedId) {
                 Log.v(LOG_TAG, "onCheckedChanged(): checkedId = " + checkedId);
             }
         });
@@ -33,6 +34,16 @@ public class MainActivity extends AppCompatActivity {
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
         tb.setLayoutParams(params);
         tb.setChecked(true);
-        group.addView(tb);
+        single.addView(tb);
+
+        MultiCheckableGroup multi = (MultiCheckableGroup) findViewById(R.id.multi_select_group);
+        multi.setOnCheckedChangeListener(new MultiCheckableGroup.OnCheckedStateChangeListener() {
+            @Override
+            public void onCheckedStateChanged(MultiCheckableGroup group, int checkedId,
+                                              boolean checked) {
+                Log.v(LOG_TAG, "onCheckedStateChanged(): checkId = " + checkedId
+                        + ", checked  = " + checked);
+            }
+        });
     }
 }

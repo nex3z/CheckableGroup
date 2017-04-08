@@ -11,18 +11,18 @@ import android.widget.LinearLayout;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CheckableGroup extends LinearLayout {
+abstract class CheckableGroup extends LinearLayout {
     private static final String LOG_TAG = CheckableGroup.class.getSimpleName();
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
     private OnClickListener mOnClickListener;
     private PassThroughHierarchyChangeListener mPassThroughListener;
-    private OnCheckedChangeListener mOnCheckedChangeListener;
-    private int mCheckedId = -1;
+    protected int mInitialCheckedId = View.NO_ID;
+
+    protected abstract void onChildClick(View child);
 
     public CheckableGroup(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
     public CheckableGroup(Context context, AttributeSet attrs) {
@@ -33,7 +33,7 @@ public class CheckableGroup extends LinearLayout {
         try {
             int value = a.getResourceId(R.styleable.CheckableGroup_cgCheckedButton, View.NO_ID);
             if (value != View.NO_ID) {
-                mCheckedId = value;
+                mInitialCheckedId = value;
             }
         } finally {
             a.recycle();
@@ -48,63 +48,22 @@ public class CheckableGroup extends LinearLayout {
         super.setOnHierarchyChangeListener(mPassThroughListener);
     }
 
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        if (mCheckedId != -1) {
-            setCheckedStateForView(mCheckedId, true);
-            setCheckedId(mCheckedId);
-        }
-    }
-
-    @Override
-    public void addView(View child, int index, ViewGroup.LayoutParams params) {
-        if (child instanceof Checkable) {
-            final Checkable checkable = (Checkable) child;
-            if (checkable.isChecked()) {
-                if (mCheckedId != -1) {
-                    setCheckedStateForView(mCheckedId, false);
-                }
-                if (child.getId() == View.NO_ID) {
-                    child.setId(generateIdForView());
-                }
-                setCheckedId(child.getId());
-            }
-        }
-
-        super.addView(child, index, params);
-    }
-
     @Override
     public void setOnHierarchyChangeListener(OnHierarchyChangeListener listener) {
         mPassThroughListener.mOnHierarchyChangeListener = listener;
     }
 
-    public void check(int id) {
-        if (id == mCheckedId || findViewById(id) == null) {
-            return;
-        }
-        if (mCheckedId != -1) {
-            setCheckedStateForView(mCheckedId, false);
-        }
-        setCheckedStateForView(id, true);
-        setCheckedId(id);
-    }
-
-    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
-        mOnCheckedChangeListener = listener;
-    }
-
-    private void setCheckedId(int id) {
-        mCheckedId = id;
-        if (mOnCheckedChangeListener != null) {
-            mOnCheckedChangeListener.onCheckedChanged(this, mCheckedId);
-        }
-    }
-
-    private void setCheckedStateForView(int viewId, boolean checked) {
+    protected void setCheckedStateForView(int viewId, boolean checked) {
         View target = findViewById(viewId);
         if (target != null && target instanceof Checkable) {
             ((Checkable) target).setChecked(checked);
+        }
+    }
+
+    protected void toggleCheckedStateForView(int viewId) {
+        View target = findViewById(viewId);
+        if (target != null && target instanceof Checkable) {
+            ((Checkable) target).toggle();
         }
     }
 
@@ -112,11 +71,7 @@ public class CheckableGroup extends LinearLayout {
         @Override
         public void onClick(View v) {
             if (v instanceof Checkable) {
-                if (mCheckedId != -1 && v.getId() != NO_ID) {
-                    setCheckedStateForView(mCheckedId, false);
-                }
-                ((Checkable) v).setChecked(true);
-                setCheckedId(v.getId());
+                onChildClick(v);
             }
         }
     }
@@ -149,7 +104,7 @@ public class CheckableGroup extends LinearLayout {
         }
     }
 
-    private int generateIdForView() {
+    protected int generateIdForView() {
         return android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1
                 ? supportGenerateViewId()
                 : generateViewId();
@@ -164,10 +119,6 @@ public class CheckableGroup extends LinearLayout {
                 return result;
             }
         }
-    }
-
-    public interface OnCheckedChangeListener {
-        void onCheckedChanged(CheckableGroup group, int checkedId);
     }
 
 }

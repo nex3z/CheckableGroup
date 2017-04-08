@@ -5,10 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.nex3z.checkablegroup.sample.MainActivity">
 
-    <com.nex3z.checkablegroup.CheckableGroup
-        android:id="@+id/cg_button_group"
+    <com.nex3z.checkablegroup.SingleCheckableGroup
+        android:id="@+id/single_select_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -32,6 +33,41 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-    </com.nex3z.checkablegroup.CheckableGroup>
+    </com.nex3z.checkablegroup.SingleCheckableGroup>
+
+    <com.nex3z.checkablegroup.MultiCheckableGroup
+        android:id="@+id/multi_select_group"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp">
+
+        <com.nex3z.checkablegroup.sample.CheckableLabel
+            android:id="@+id/label_a"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="A"/>
+
+        <com.nex3z.checkablegroup.sample.CheckableLabel
+            android:id="@+id/label_b"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="B"/>
+
+        <com.nex3z.checkablegroup.sample.CheckableLabel
+            android:id="@+id/label_c"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="C"/>
+
+    </com.nex3z.checkablegroup.MultiCheckableGroup>
 
 </LinearLayout>
