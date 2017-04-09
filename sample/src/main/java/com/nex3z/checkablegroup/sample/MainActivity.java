@@ -3,9 +3,6 @@ package com.nex3z.checkablegroup.sample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ToggleButton;
 
 import com.nex3z.checkablegroup.MultiCheckableGroup;
 import com.nex3z.checkablegroup.SingleCheckableGroup;
@@ -21,28 +18,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initCheckableButtonGroup() {
-        SingleCheckableGroup single = (SingleCheckableGroup) findViewById(R.id.single_select_group);
-        single.setOnCheckedChangeListener(new SingleCheckableGroup.OnCheckedChangeListener() {
+        SingleCheckableGroup passiveSingleCheckableGroup = (SingleCheckableGroup) findViewById(R.id.single_select_group_passive);
+        passiveSingleCheckableGroup.setOnCheckedChangeListener(new SingleCheckableGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SingleCheckableGroup group, int checkedId) {
-                Log.v(LOG_TAG, "onCheckedChanged(): checkedId = " + checkedId);
+                Log.v(LOG_TAG, "passiveSingleCheckableGroup: " + checkedId);
             }
         });
 
-        ToggleButton tb = new ToggleButton(this);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                0, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-        tb.setLayoutParams(params);
-        tb.setChecked(true);
-        single.addView(tb);
-
-        MultiCheckableGroup multi = (MultiCheckableGroup) findViewById(R.id.multi_select_group);
-        multi.setOnCheckedChangeListener(new MultiCheckableGroup.OnCheckedStateChangeListener() {
+        SingleCheckableGroup activeSingleCheckableGroup = (SingleCheckableGroup) findViewById(R.id.single_select_group_active);
+        activeSingleCheckableGroup.setOnCheckedChangeListener(new SingleCheckableGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedStateChanged(MultiCheckableGroup group, int checkedId,
-                                              boolean checked) {
-                Log.v(LOG_TAG, "onCheckedStateChanged(): checkId = " + checkedId
-                        + ", checked  = " + checked);
+            public void onCheckedChanged(SingleCheckableGroup group, int checkedId) {
+                Log.v(LOG_TAG, "activeSingleCheckableGroup: " + checkedId);
+            }
+        });
+
+        MultiCheckableGroup passiveMultiCheckableGroup = (MultiCheckableGroup) findViewById(R.id.multi_select_group_passive);
+        passiveMultiCheckableGroup.setOnCheckedChangeListener(new MultiCheckableGroup.OnCheckedStateChangeListener() {
+            @Override
+            public void onCheckedStateChanged(MultiCheckableGroup group, int checkedId, boolean isChecked) {
+                Log.v(LOG_TAG, "passiveMultiCheckableGroup: checkedId = " + checkedId + ", isChecked = " + isChecked);
+            }
+        });
+
+        MultiCheckableGroup activeMultiCheckableGroup = (MultiCheckableGroup) findViewById(R.id.multi_select_group_active);
+        activeMultiCheckableGroup.setOnCheckedChangeListener(new MultiCheckableGroup.OnCheckedStateChangeListener() {
+            @Override
+            public void onCheckedStateChanged(MultiCheckableGroup group, int checkedId, boolean isChecked) {
+                Log.v(LOG_TAG, "activeMultiCheckableGroup: checkedId = " + checkedId + ", isChecked = " + isChecked);
             }
         });
     }

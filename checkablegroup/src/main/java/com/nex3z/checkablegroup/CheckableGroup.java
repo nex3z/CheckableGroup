@@ -16,10 +16,13 @@ abstract class CheckableGroup extends LinearLayout {
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
     private OnClickListener mOnClickListener;
+    private OnCheckedChangeListener mChildOnCheckedChangeListener;
     private PassThroughHierarchyChangeListener mPassThroughListener;
     protected int mInitialCheckedId = View.NO_ID;
+    protected boolean mPassiveMode = false;
 
     protected abstract void onChildClick(View child);
+    protected abstract <T extends View & Checkable> void onChildCheckedChange(T child, boolean isChecked);
 
     public CheckableGroup(Context context) {
         this(context, null);
@@ -31,10 +34,8 @@ abstract class CheckableGroup extends LinearLayout {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
                 R.styleable.CheckableGroup, 0, 0);
         try {
-            int value = a.getResourceId(R.styleable.CheckableGroup_cgCheckedButton, View.NO_ID);
-            if (value != View.NO_ID) {
-                mInitialCheckedId = value;
-            }
+            mInitialCheckedId = a.getResourceId(R.styleable.CheckableGroup_cgCheckedButton, View.NO_ID);
+            mPassiveMode = a.getBoolean(R.styleable.CheckableGroup_cgPassiveMode, false);
         } finally {
             a.recycle();
         }
@@ -44,6 +45,7 @@ abstract class CheckableGroup extends LinearLayout {
 
     private void init() {
         mOnClickListener = new OnChildClickListener();
+        mChildOnCheckedChangeListener = new CheckedStateTracker();
         mPassThroughListener = new PassThroughHierarchyChangeListener();
         super.setOnHierarchyChangeListener(mPassThroughListener);
     }
@@ -76,18 +78,28 @@ abstract class CheckableGroup extends LinearLayout {
         }
     }
 
+    private class CheckedStateTracker implements OnCheckedChangeListener {
+        @Override
+        public <T extends View & Checkable> void onCheckedChanged(T view, boolean isChecked) {
+            onChildCheckedChange(view, isChecked);
+        }
+    }
+
     private class PassThroughHierarchyChangeListener implements
             ViewGroup.OnHierarchyChangeListener {
         private ViewGroup.OnHierarchyChangeListener mOnHierarchyChangeListener;
 
         public void onChildViewAdded(View parent, View child) {
             if (parent == CheckableGroup.this && child instanceof Checkable) {
-                int id = child.getId();
-                if (id == View.NO_ID) {
-                    id = generateIdForView();
-                    child.setId(id);
+                if (child.getId() == View.NO_ID) {
+                    child.setId(generateIdForView());
+                };
+                if (!mPassiveMode) {
+                    child.setOnClickListener(mOnClickListener);
+                } else if (child instanceof CheckedStateObservable) {
+                    ((CheckedStateObservable) child)
+                            .setOnCheckedChangeListener(mChildOnCheckedChangeListener);
                 }
-                child.setOnClickListener(mOnClickListener);
             }
             if (mOnHierarchyChangeListener != null) {
                 mOnHierarchyChangeListener.onChildViewAdded(parent, child);
@@ -96,7 +108,12 @@ abstract class CheckableGroup extends LinearLayout {
 
         public void onChildViewRemoved(View parent, View child) {
             if (parent == CheckableGroup.this && child instanceof Checkable) {
-                child.setOnClickListener(null);
+                if (!mPassiveMode) {
+                    child.setOnClickListener(null);
+                } else if (child instanceof CheckedStateObservable) {
+                    ((CheckedStateObservable) child)
+                            .setOnCheckedChangeListener(mChildOnCheckedChangeListener);
+                }
             }
             if (mOnHierarchyChangeListener != null) {
                 mOnHierarchyChangeListener.onChildViewRemoved(parent, child);

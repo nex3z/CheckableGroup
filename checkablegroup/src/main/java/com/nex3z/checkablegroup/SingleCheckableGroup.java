@@ -48,12 +48,24 @@ public class SingleCheckableGroup extends CheckableGroup {
     }
 
     @Override
-    protected void onChildClick(View v) {
+    protected void onChildClick(View child) {
         if (mCheckedId != -1) {
             setCheckedStateForView(mCheckedId, false);
         }
-        ((Checkable) v).setChecked(true);
-        setCheckedId(v.getId());
+        ((Checkable) child).setChecked(true);
+        setCheckedId(child.getId());
+
+    }
+
+    @Override
+    protected <T extends View & Checkable> void onChildCheckedChange(T child, boolean isChecked) {
+        if (isChecked) {
+            if (mCheckedId != View.NO_ID && mCheckedId != child.getId()) {
+                setCheckedStateForView(mCheckedId, false);
+            }
+            int id = child.getId();
+            setCheckedId(id);
+        }
     }
 
     public void check(int id) {

@@ -9,40 +9,16 @@
     tools:context="com.nex3z.checkablegroup.sample.MainActivity">
 
     <com.nex3z.checkablegroup.SingleCheckableGroup
-        android:id="@+id/single_select_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:cgCheckedButton="@+id/tb_b">
-
-        <ToggleButton
-            android:id="@+id/tb_a"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-        <ToggleButton
-            android:id="@+id/tb_b"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-        <ToggleButton
-            android:id="@+id/tb_c"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
-
-    </com.nex3z.checkablegroup.SingleCheckableGroup>
-
-    <com.nex3z.checkablegroup.MultiCheckableGroup
-        android:id="@+id/multi_select_group"
+        android:id="@+id/single_select_group_passive"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="16dp">
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:cgPassiveMode="true"
+        app:cgCheckedButton="@+id/acl_b">
 
-        <com.nex3z.checkablegroup.sample.CheckableLabel
-            android:id="@+id/label_a"
+        <com.nex3z.checkablegroup.sample.ActiveCheckableLabel
+            android:id="@+id/active_single_a"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -50,8 +26,8 @@
             android:gravity="center"
             android:text="A"/>
 
-        <com.nex3z.checkablegroup.sample.CheckableLabel
-            android:id="@+id/label_b"
+        <com.nex3z.checkablegroup.sample.ActiveCheckableLabel
+            android:id="@+id/active_single_b"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -59,8 +35,122 @@
             android:gravity="center"
             android:text="B"/>
 
-        <com.nex3z.checkablegroup.sample.CheckableLabel
-            android:id="@+id/label_c"
+        <com.nex3z.checkablegroup.sample.ActiveCheckableLabel
+            android:id="@+id/active_single_c"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="C"/>
+
+    </com.nex3z.checkablegroup.SingleCheckableGroup>
+
+    <com.nex3z.checkablegroup.SingleCheckableGroup
+        android:id="@+id/single_select_group_active"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:cgPassiveMode="false"
+        app:cgCheckedButton="@+id/acl_b">
+
+        <com.nex3z.checkablegroup.sample.PassiveCheckableLabel
+            android:id="@+id/passive_single_a"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="A"/>
+
+        <com.nex3z.checkablegroup.sample.PassiveCheckableLabel
+            android:id="@+id/passive_single_b"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="B"/>
+
+        <com.nex3z.checkablegroup.sample.PassiveCheckableLabel
+            android:id="@+id/passive_single_c"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="C"/>
+
+    </com.nex3z.checkablegroup.SingleCheckableGroup>
+
+    <com.nex3z.checkablegroup.MultiCheckableGroup
+        android:id="@+id/multi_select_group_passive"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:cgPassiveMode="true"
+        app:cgCheckedButton="@+id/acl_b">
+
+        <com.nex3z.checkablegroup.sample.ActiveCheckableLabel
+            android:id="@+id/active_multi_a"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="A"/>
+
+        <com.nex3z.checkablegroup.sample.ActiveCheckableLabel
+            android:id="@+id/active_multi_b"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="B"/>
+
+        <com.nex3z.checkablegroup.sample.ActiveCheckableLabel
+            android:id="@+id/active_multi_c"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="C"/>
+
+    </com.nex3z.checkablegroup.MultiCheckableGroup>
+
+    <com.nex3z.checkablegroup.MultiCheckableGroup
+        android:id="@+id/multi_select_group_active"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:cgPassiveMode="false"
+        app:cgCheckedButton="@+id/acl_b">
+
+        <com.nex3z.checkablegroup.sample.PassiveCheckableLabel
+            android:id="@+id/passive_multi_a"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="A"/>
+
+        <com.nex3z.checkablegroup.sample.PassiveCheckableLabel
+            android:id="@+id/passive_multi_b"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:text="B"/>
+
+        <com.nex3z.checkablegroup.sample.PassiveCheckableLabel
+            android:id="@+id/passive_multi_c"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

@@ -3,23 +3,22 @@ package com.nex3z.checkablegroup.sample;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.widget.Checkable;
 
-public class CheckableLabel extends AppCompatTextView implements Checkable {
+public class PassiveCheckableLabel extends AppCompatButton implements Checkable {
     private boolean mChecked;
     private int mCheckedTextColor;
     private int mUnchekcedTextColor;
     private Drawable mCheckedDrawable;
     private Drawable mUncheckedDrawable;
 
-    public CheckableLabel(Context context) {
-        super(context);
-        init();
+    public PassiveCheckableLabel(Context context) {
+        this(context, null);
     }
 
-    public CheckableLabel(Context context, AttributeSet attrs) {
+    public PassiveCheckableLabel(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }

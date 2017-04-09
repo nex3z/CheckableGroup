@@ -2,5 +2,6 @@
 <resources>
     <declare-styleable name="CheckableGroup">
         <attr name="cgCheckedButton" format="reference"/>
+        <attr name="cgPassiveMode" format="boolean"/>
     </declare-styleable>
 </resources>

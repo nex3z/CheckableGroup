@@ -9,7 +9,6 @@ public class MultiCheckableGroup extends CheckableGroup {
     private static final String LOG_TAG = MultiCheckableGroup.class.getSimpleName();
 
     private OnCheckedStateChangeListener mOnCheckedStateChangeListener;
-    private boolean mManageChildState = true;
 
     public MultiCheckableGroup(Context context) {
         super(context);
@@ -29,10 +28,13 @@ public class MultiCheckableGroup extends CheckableGroup {
 
     @Override
     protected void onChildClick(View child) {
-        if (mManageChildState) {
-            ((Checkable) child).toggle();
-        }
+        ((Checkable) child).toggle();
         notifyCheckedStateChange(child.getId(), ((Checkable) child).isChecked());
+    }
+
+    @Override
+    protected <T extends View & Checkable> void onChildCheckedChange(T child, boolean isChecked) {
+        notifyCheckedStateChange(child.getId(), isChecked);
     }
 
     public void check(int id) {
@@ -57,13 +59,13 @@ public class MultiCheckableGroup extends CheckableGroup {
         mOnCheckedStateChangeListener = listener;
     }
 
-    private void notifyCheckedStateChange(int id, boolean checked) {
+    private void notifyCheckedStateChange(int id, boolean isChecked) {
         if (mOnCheckedStateChangeListener != null) {
-            mOnCheckedStateChangeListener.onCheckedStateChanged(this, id, checked);
+            mOnCheckedStateChangeListener.onCheckedStateChanged(this, id, isChecked);
         }
     }
 
     public interface OnCheckedStateChangeListener {
-        void onCheckedStateChanged(MultiCheckableGroup group, int checkedId, boolean checked);
+        void onCheckedStateChanged(MultiCheckableGroup group, int checkedId, boolean isChecked);
     }
 }
