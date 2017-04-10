@@ -84,6 +84,35 @@
 
     </com.nex3z.checkablegroup.SingleCheckableGroup>
 
+    <com.nex3z.checkablegroup.SingleCheckableGroup
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:cgCheckedButton="@+id/rb_a"
+        app:cgPassiveMode="true">
+
+        <RadioButton
+            android:id="@+id/rb_a"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="A"/>
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="B"/>
+
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="C"/>
+
+    </com.nex3z.checkablegroup.SingleCheckableGroup>
+
     <com.nex3z.checkablegroup.MultiCheckableGroup
         android:id="@+id/multi_select_group_passive"
         android:layout_width="match_parent"
@@ -157,6 +186,33 @@
             android:layout_margin="8dp"
             android:gravity="center"
             android:text="C"/>
+
+    </com.nex3z.checkablegroup.MultiCheckableGroup>
+
+    <com.nex3z.checkablegroup.MultiCheckableGroup
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:cgPassiveMode="true">
+
+        <ToggleButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"/>
+
+        <ToggleButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"/>
+
+        <ToggleButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"/>
 
     </com.nex3z.checkablegroup.MultiCheckableGroup>
 

@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,13 +17,15 @@ abstract class CheckableGroup extends LinearLayout {
     private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
     private OnClickListener mOnClickListener;
-    private OnCheckedChangeListener mChildOnCheckedChangeListener;
+    private OnCheckedChangeListener mCheckedStateListener;
+    private CompoundButton.OnCheckedChangeListener mCompoundButtonStateListener;
     private PassThroughHierarchyChangeListener mPassThroughListener;
     protected int mInitialCheckedId = View.NO_ID;
     protected boolean mPassiveMode = false;
 
     protected abstract void onChildClick(View child);
-    protected abstract <T extends View & Checkable> void onChildCheckedChange(T child, boolean isChecked);
+    protected abstract <T extends View & Checkable> void onChildCheckedChange(T child,
+                                                                              boolean isChecked);
 
     public CheckableGroup(Context context) {
         this(context, null);
@@ -44,8 +47,6 @@ abstract class CheckableGroup extends LinearLayout {
     }
 
     private void init() {
-        mOnClickListener = new OnChildClickListener();
-        mChildOnCheckedChangeListener = new CheckedStateTracker();
         mPassThroughListener = new PassThroughHierarchyChangeListener();
         super.setOnHierarchyChangeListener(mPassThroughListener);
     }
@@ -85,6 +86,13 @@ abstract class CheckableGroup extends LinearLayout {
         }
     }
 
+    private class CompoundButtonStateTracker implements CompoundButton.OnCheckedChangeListener {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            onChildCheckedChange(buttonView, isChecked);
+        }
+    }
+
     private class PassThroughHierarchyChangeListener implements
             ViewGroup.OnHierarchyChangeListener {
         private ViewGroup.OnHierarchyChangeListener mOnHierarchyChangeListener;
@@ -95,10 +103,22 @@ abstract class CheckableGroup extends LinearLayout {
                     child.setId(generateIdForView());
                 };
                 if (!mPassiveMode) {
+                    if (mOnClickListener == null) {
+                        mOnClickListener = new OnChildClickListener();
+                    }
                     child.setOnClickListener(mOnClickListener);
                 } else if (child instanceof CheckedStateObservable) {
+                    if (mCheckedStateListener == null) {
+                        mCheckedStateListener = new CheckedStateTracker();
+                    }
                     ((CheckedStateObservable) child)
-                            .setOnCheckedChangeListener(mChildOnCheckedChangeListener);
+                            .setOnCheckedChangeListener(mCheckedStateListener);
+                } else if (child instanceof CompoundButton) {
+                    if (mCompoundButtonStateListener == null) {
+                        mCompoundButtonStateListener = new CompoundButtonStateTracker();
+                    }
+                    ((CompoundButton) child)
+                            .setOnCheckedChangeListener(mCompoundButtonStateListener);
                 }
             }
             if (mOnHierarchyChangeListener != null) {
@@ -112,7 +132,9 @@ abstract class CheckableGroup extends LinearLayout {
                     child.setOnClickListener(null);
                 } else if (child instanceof CheckedStateObservable) {
                     ((CheckedStateObservable) child)
-                            .setOnCheckedChangeListener(mChildOnCheckedChangeListener);
+                            .setOnCheckedChangeListener(null);
+                } else if (child instanceof CompoundButton) {
+                    ((CompoundButton) child).setOnCheckedChangeListener(null);
                 }
             }
             if (mOnHierarchyChangeListener != null) {
