@@ -10,11 +10,8 @@ import android.widget.Checkable;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 abstract class CheckableGroup extends LinearLayout {
     private static final String LOG_TAG = CheckableGroup.class.getSimpleName();
-    private static final AtomicInteger sNextGeneratedId = new AtomicInteger(1);
 
     private OnClickListener mOnClickListener;
     private OnCheckedChangeListener mCheckedStateListener;
@@ -100,7 +97,7 @@ abstract class CheckableGroup extends LinearLayout {
         public void onChildViewAdded(View parent, View child) {
             if (parent == CheckableGroup.this && child instanceof Checkable) {
                 if (child.getId() == View.NO_ID) {
-                    child.setId(generateIdForView());
+                    child.setId(generateIdForView(child));
                 };
                 if (!mPassiveMode) {
                     if (mOnClickListener == null) {
@@ -143,21 +140,10 @@ abstract class CheckableGroup extends LinearLayout {
         }
     }
 
-    protected int generateIdForView() {
+    protected int generateIdForView(View view) {
         return android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1
-                ? supportGenerateViewId()
+                ? view.hashCode()
                 : generateViewId();
-    }
-
-    private static int supportGenerateViewId() {
-        for (;;) {
-            final int result = sNextGeneratedId.get();
-            int newValue = result + 1;
-            if (newValue > 0x00FFFFFF) newValue = 1;
-            if (sNextGeneratedId.compareAndSet(result, newValue)) {
-                return result;
-            }
-        }
     }
 
 }

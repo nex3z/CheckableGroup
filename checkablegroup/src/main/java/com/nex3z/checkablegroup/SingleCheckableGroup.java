@@ -38,7 +38,7 @@ public class SingleCheckableGroup extends CheckableGroup {
                     setCheckedStateForView(mCheckedId, false);
                 }
                 if (child.getId() == View.NO_ID) {
-                    child.setId(generateIdForView());
+                    child.setId(generateIdForView(child));
                 }
                 setCheckedId(child.getId());
             }
